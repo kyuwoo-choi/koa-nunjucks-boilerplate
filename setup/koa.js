@@ -5,6 +5,7 @@ const logger = require('koa-logger');
 const serve = require('koa-static');
 const path = require('path');
 const glob = require('glob');
+const error = require('koa-error');
 
 module.exports = function(app) {
   // Logger
@@ -18,6 +19,11 @@ module.exports = function(app) {
 
   // Serve static files
   app.use(serve(path.join(__dirname, '..', 'public')));
+
+  app.use(error({
+    engine: 'nunjucks',
+    template: path.join(__dirname, '..', 'views', 'error.njk')
+  }));
 
   // Compress
   app.use(compress());
