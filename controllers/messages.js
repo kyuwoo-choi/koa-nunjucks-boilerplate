@@ -1,9 +1,7 @@
 'use strict';
 const views = require('co-views');
 const parse = require('co-body');
-const router = require('koa-router')({
-  prefix: '/'
-});
+const router = require('koa-router')();
 const messages = [
   { id: 0,
     message: 'Koa next generation web framework for node.js'
@@ -13,14 +11,22 @@ const messages = [
   }
 ];
 const render = views(__dirname + '/../views', {
-  map: { html: 'swig' }
+  default: 'njk',
+  map: {
+    njk: 'nunjucks'
+  },
+  locals: {
+    settings: {
+      views: [__dirname + '/../views']
+    }
+  }
 });
 
 
+router.post('/messages', create);
 router.get('/', home);
 router.get('/messages', list);
 router.get('/messages/:id', fetch);
-router.post('/messages', create);
 router.get('/async', delay);
 router.get('/promise', promise);
 
